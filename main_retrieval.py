@@ -343,11 +343,10 @@ def eval_epoch(args, model, test_dataloader, device):
             text_mask_list = [x.to(device) for x in text_mask_list]
 
             s_feat = model.get_text_feat(text, text_mask)
-            s_feat_list = map(list, zip(*[
-                model.get_text_feat(text, text_mask)
-                for text, text_mask in zip(text_list, text_mask_list)
-            ]))
+            
+            s_feat_list = [model.get_text_feat(text, text_mask) for text, text_mask in zip(text_list, text_mask_list)]
             c_feat = torch.stack(s_feat_list, dim=1)
+            
             f_feat = model.get_video_feat(video, video_mask)
             ids.append(inds)
             batch_s_feat.append(s_feat)
