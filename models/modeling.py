@@ -145,10 +145,7 @@ class Model(nn.Module):
             video = video.view(b * pair * bs * ts, channel, h, w)
 
         s_feat = self.get_text_feat(text, text_mask)
-        s_feat_list = map(list, zip(*[
-            self.get_text_feat(text, text_mask)
-            for text, text_mask in zip(text_list, text_mask_list)
-        ]))
+        s_feat_list = [model.get_text_feat(text, text_mask) for text, text_mask in zip(text_list, text_mask_list)]
         c_feat = torch.stack(s_feat_list, dim=1)
         f_feat = self.get_video_feat(video, video_mask)
 
