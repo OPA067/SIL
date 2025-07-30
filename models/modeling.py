@@ -278,9 +278,3 @@ class Model(nn.Module):
                 module.weight.data.fill_(1.0)
         if isinstance(module, nn.Linear) and module.bias is not None:
             module.bias.data.zero_()
-
- # "The video shows a group of people decorating a Christmas tree. "
- # "The scene is set in a living room with a Christmas tree and various decorations. "
- # "The people are seen hanging ornaments, lights, and tinsel on the tree. "
- # "There are also scenes of them baking cookies and enjoying a meal together. "
- # "The video ends with a closing title screen."
