@@ -25,6 +25,18 @@ def compute_metrics(x):
     metrics["cols"] = [int(i) for i in list(ind)]
     return metrics
 
+def np_softmax(X, theta=1.0, axis=0):
+    y = np.atleast_2d(X * 100)
+    if axis is None:
+        axis = next(j[0] for j in enumerate(y.shape) if j[1] > 1)
+    y = y * float(theta)
+    y = y - np.expand_dims(np.max(y, axis=axis), axis)
+    y = np.exp(y)
+    ax_sum = np.expand_dims(np.sum(y, axis=axis), axis)
+    p = y / ax_sum
+    if len(X.shape) == 1:
+        p = p.flatten()
+    return p
 
 def print_computed_metrics(metrics):
     r1 = metrics['R1']
