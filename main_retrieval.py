@@ -21,7 +21,7 @@ from dataloaders.data_dataloaders import DATALOADER_DICT
 from models.modeling import AllGather, Model
 from models.optimization import BertAdam
 from utils.metric_logger import MetricLogger
-from utils.metrics import compute_metrics, tensor_text_to_video_metrics, tensor_video_to_text_sim
+from utils.metrics import compute_metrics, tensor_text_to_video_metrics, tensor_video_to_text_sim, np_softmax
 
 from utils.comm import is_main_process, synchronize
 from utils.logger import setup_logger
@@ -386,8 +386,8 @@ def eval_epoch(args, model, test_dataloader, device):
         return tv_metrics['R1']
     else:
         logger.info("sim matrix size: {}, {}".format(sim_matrix.shape[0], sim_matrix.shape[1]))
-        tv_metrics = compute_metrics(sim_matrix)
-        vt_metrics = compute_metrics(sim_matrix.T)
+        tv_metrics = compute_metrics(np_softmax(sim_matrix))
+        vt_metrics = compute_metrics(np_softmax(sim_matrix.T))
         logger.info('Length-T: {}, Length-V:{}'.format(len(sim_matrix), len(sim_matrix[0])))
         logger.info('[end] compute_metrics')
         toc3 = time.time()
