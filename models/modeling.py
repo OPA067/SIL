@@ -167,14 +167,10 @@ class Model(nn.Module):
         b, f, d = f_feat.size(0), f_feat.size(1), f_feat.size(2),
 
         ########## Step-I: Sort ##########
-        # sims_sf = torch.einsum("ad,bfd->abf", [self.norm(s_feat), self.norm(f_feat)])
-        # sims_sf = sims_sf.diagonal(dim1=0, dim2=1).transpose(0, 1)
-        # _, f_new_idx = torch.topk(sims_sf, k=f, dim=-1, largest=True)
-        # f_feat = f_feat[torch.arange(b)[:, None], f_new_idx, :]
-        # sims_sc = torch.einsum("ad,bcd->abc", [self.norm(s_feat), self.norm(c_feat)])
-        # sims_sc = sims_sc.diagonal(dim1=0, dim2=1).transpose(0, 1)
-        # _, c_new_idx = torch.topk(sims_sc, k=c, dim=-1, largest=True)
-        # c_feat = c_feat[torch.arange(b)[:, None], c_new_idx, :]
+        sims_sf = torch.einsum("ad,bfd->abf", [self.norm(s_feat), self.norm(f_feat)])
+        sims_sf = sims_sf.diagonal(dim1=0, dim2=1).transpose(0, 1)
+        _, f_new_idx = torch.topk(sims_sf, k=f, dim=-1, largest=True)
+        f_feat = f_feat[torch.arange(b)[:, None], f_new_idx, :]
 
         ########## Step-II: Interaction ##########
         # <c_feat, f_feat>
